@@ -1,304 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<link rel = "stylesheet" href =  "11.css">
- 
-<link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/8861/8861317.png">  
-
-<title>11 v 11</title>
-
-
-
-<style>
-
-
-
-</style>
+    <link rel="stylesheet" href="11.css">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/8861/8861317.png">  
+    <title>11 v 11</title>
+    <style>
+        
+    </style>
 </head>
 <body>
 
-
-
-<div class="hero">
-
-  <video autoplay loop muted plays-inline class="back-video">
-
-    <source src ="" type = "video/mp4">
-
-  </video>
-
-
-
-  <img src="/Users/amrsaad/Downloads/CS Final Proj./Images/11.png" alt="11.png">
-
-
-
-  <nav>
-    <img src = "/Users/amrsaad/Downloads/root/images/main_logo-removebg-preview.png" class ="logo">
-    <ul>
-      <li ><a onClick ="window.location.href = '';">Home</a></li>
-      <li ><a onClick ="window.location.href = '';">Squads</a></li>
-      <li ><a>5v5</a>
-
-        <ul class ="dropdown">
-          <li ><a onClick ="window.location.href = '';">Qatar 2022</a></li>
-          <li ><a onClick ="window.location.href = '';">Russia 2018</a></li>
-        </ul>
-
-      </li>
-
-
-      <li ><a onClick ="window.location.href = '';">7v7</a></li>
-      <li ><a onClick ="window.location.href = '';">11v11</a></li>
-    </ul>
-  </nav>
-
-
-  <div class="content">
-  </div>
-
    
-</div>
 
-
-<!-- Draggable DIV -->
-<div id="LB">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" /></div>
-</div>
-
-<div id="LCB">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" /></div>
-</div>
-
-<div id="RCB">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" /></div>
-</div>
-
-
-<div id="RB">
-  <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-  <div><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" /></div>
-</div>
+    <div id="container">
+        <div id="card" style="position: absolute; top: -9999px; left: -9999px;"></div> <!-- Hidden template card -->
+    </div>
 
 
 
+    <nav>
+        <img src = "" class ="logo">
+        <ul>
+          <li ><a onClick ="window.location.href = '/Users/amrsaad/Downloads/CS Final Proj./Main/main.html';">Home</a></li>
+          <li ><a onClick ="window.location.href = '';">Squads</a></li>
+          <li ><a>5v5</a>
+    
+            <ul class ="dropdown">
+              <li ><a onClick ="window.location.href = '';">Qatar 2022</a></li>
+              <li ><a onClick ="window.location.href = '';">Russia 2018</a></li>
+            </ul>
+    
+          </li>
+    
+    
+          <li ><a onClick ="window.location.href = '';">7v7</a></li>
+          <li ><a onClick ="window.location.href = '/Users/amrsaad/Downloads/CS Final Proj./11 v 11/11 copy.html';">11v11</a></li>
+        </ul>
+      </nav>
+    
 
-
-
-
-
-
-
-<style>
-
-body {
-
-  /* Setting the background image */
-
-
-  background-image: url('https://c4.wallpaperflare.com/wallpaper/707/220/899/gradient-blue-pink-abstract-art-wallpaper-preview.jpg');
-
-  background-attachment: fixed;
-  background-size: cover; /* Image covers entire page */
-
-
-
-}
-
-
-
-
-  
-</style>
-
-<script>
-
-// Make the DIV element draggable:
-dragElement(document.getElementById("LB"));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
-// Make the DIV element draggable:
-dragElement(document.getElementById("RCB"));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
-
-// Make the DIV element draggable:
-dragElement(document.getElementById("RB"));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
-// Make the DIV element draggable:
-dragElement(document.getElementById("LCB"));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
-
-
-
-</script>
-
+    <script src="11.js"></script>
 </body>
 </html>
-
