@@ -1,145 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<link rel = "stylesheet" href =  "Squads.css">
- 
-
-<link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/8861/8861317.png">  
-
-<title>Squads</title>
-
-
-
-<style>
-
-
-
-
-
-
-</style>
+  <link rel="stylesheet" href="Squads.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squad Manager</title>
+    <style>
+        
+    </style>
 </head>
 <body>
-
-
-
-
-
-    <h1> Squads</h1>
-
-
-
-
-
-
-   
-</div>
-
-<div class ="container">
-  <div id ="left">
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 1</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 2</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 3</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 4</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 5</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 6</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 7</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 8</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 9</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 10</div>
-    <div class="list" draggable="true"><img src="/Users/amrsaad/Downloads/CS Final Proj./Images/test 600.png" > Player 11</div>
-
-
-  </div>
-  <div id ="right"></div>
-</div>
-
-<script>
-
-let lists = document.getElementsByClassName("list");
-
-let rightBox = document.getElementById("right");
-
-
-let leftBox = document.getElementById("left");
-
-for (list of lists){
-
-  list.addEventListener ("dragstart", function (e) {
-    let selected = e.target;
-
-    rightBox.addEventListener("dragover", function(e){
-        e.preventDefault();
-    });
-
-    rightBox.addEventListener("drop", function(e){
-        rightBox.appendChild(selected);
-        selected = null;
-
-    })
-
-        leftBox.addEventListener("dragover", function(e){
-
-          e.preventDefault();
-          });
-
-          leftBox.addEventListener("drop", function(e){
-          leftBox.appendChild(selected);
-          selected = null;
-
-
-
-    });
-
-
-
-
-
-
-  })
-
-
-
-
-}
-
-
-</script>
-
-
-
-
-
-
-<style>
-
-body {
-
-  /* Setting the background image */
-
-
-  background-image: url('https://c4.wallpaperflare.com/wallpaper/707/220/899/gradient-blue-pink-abstract-art-wallpaper-preview.jpg');
-
-  background-attachment: fixed;
-  background-size: cover; /* Image covers entire page */
-
-
-
-}
-
-
-
-
-  
-</style>
-
-<script>
-
-
-
-</script>
+    <h1>Squad Manager</h1>
+    <div id="form-container">
+        <label for="squad-name">Squad Name:</label>
+        <input type="text" id="squad-name" placeholder="Enter Squad Name" />
+        <div>
+            <label for="player-name">Player Name:</label>
+            <input type="text" id="player-name" placeholder="Enter Player Name" />
+            <button id="add-player">Add Player</button>
+        </div>
+        <button id="save-squad">Save Squad</button>
+    </div>
+
+    <h2>Saved Squads</h2>
+    <div id="squad-list"></div>
+
+    <script src="Squads.js"></script>
 
 </body>
 </html>
-
