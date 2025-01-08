@@ -7,6 +7,17 @@ const columnGap = 80; // Horizontal gap between columns
 const container = document.getElementById('container'); // Get the container element where the cards will be placed
 const card = document.getElementById('card'); // Get the base card template for cloning later
 
+
+
+
+
+
+
+
+
+
+
+
 // Container's dimensions
 const containerWidth = container.offsetWidth; // Width of the container
 const containerHeight = container.offsetHeight; // Height of the container
@@ -82,6 +93,7 @@ function placeCard() {
     label.style.outline = 'none'; // Remove outline when clicked
     label.style.background = 'transparent'; // Transparent background
     label.style.color = 'white'; // White text color
+    label.style.fontFamily = "Homenaje";
     label.style.cursor = 'pointer'; // Change cursor to pointer for interactivity
 
     // Make label editable on click (focus event)
@@ -101,14 +113,40 @@ function placeCard() {
     cardIndex++; // Increment the card index for the next player
 }
 
-// Create the "Add Player" button and position it at the top left of the container
+// Create the "Add Player" button
 const placeButton = document.createElement('button');
 placeButton.textContent = 'Add Player'; // Button text
-placeButton.style.position = 'absolute';
-placeButton.style.top = '10px';
-placeButton.style.left = '10px';
-placeButton.addEventListener('click', placeCard); // Add event listener to place a card when clicked
-container.appendChild(placeButton); // Append the button to the container
+
+// Apply initial styles to the button
+placeButton.style.position = 'absolute'; // Position it relative to the container
+placeButton.style.padding = '10px 20px'; // Add some padding for better appearance
+placeButton.style.backgroundColor = '#007BFF'; // Set background color
+placeButton.style.color = 'white'; // Set text color
+placeButton.style.border = 'none'; // Remove border
+placeButton.style.borderRadius = '5px'; // Add rounded corners
+placeButton.style.cursor = 'cursor'; // Change cursor to pointer
+placeButton.style.fontSize = '14px'; // Set font size
+
+function positionButton() {
+    const containerRect = container.getBoundingClientRect(); // Get the container's position and dimensions
+    const scrollTop = window.scrollY || document.documentElement.scrollTop; // Get current page scroll position
+
+    // Position the button 50px above the container, adjusting for any page scroll
+    placeButton.style.top = `${containerRect.top + scrollTop - 50}px`; // Adjust for scroll
+    placeButton.style.left = `${containerRect.left}px`; // Align horizontally with the container
+}
+
+
+// Position the button initially and on window resize
+positionButton();
+window.addEventListener('resize', positionButton);
+
+// Add event listener to place a card when clicked
+placeButton.addEventListener('click', placeCard);
+
+// Append the button to the body
+document.body.appendChild(placeButton);
+
 
 let activeCard = null; // To track the card being dragged
 let startX = 0, startY = 0, newX = 0, newY = 0;
@@ -126,20 +164,45 @@ function mouseDown(e) {
     document.addEventListener('mouseup', mouseUp);
 }
 
-// Function to handle the mouse move event (dragging the card)
 function mouseMove(e) {
     if (!activeCard) return; // If no card is being dragged, return
 
-    newX = startX - e.clientX; // Calculate how far the mouse has moved horizontally
-    newY = startY - e.clientY; // Calculate how far the mouse has moved vertically
+    // Calculate the new position based on mouse movement
+    newX = startX - e.clientX; // Horizontal movement
+    newY = startY - e.clientY; // Vertical movement
 
     startX = e.clientX; // Update the initial mouse position
     startY = e.clientY;
 
-    // Update the card's position based on the mouse movement
-    activeCard.style.top = (activeCard.offsetTop - newY) + 'px';
-    activeCard.style.left = (activeCard.offsetLeft - newX) + 'px';
+    // Get the container's boundaries
+    const containerRect = container.getBoundingClientRect();
+    const cardRect = activeCard.getBoundingClientRect();
+
+    // Calculate the new position with boundary checks
+    let newLeft = activeCard.offsetLeft - newX;
+    let newTop = activeCard.offsetTop - newY;
+
+    // Constrain horizontal movement
+    if (cardRect.left <= containerRect.left && newX > 0) {
+        newLeft = activeCard.offsetLeft; // Prevent moving further left
+    }
+    if (cardRect.right >= containerRect.right && newX < 0) {
+        newLeft = activeCard.offsetLeft; // Prevent moving further right
+    }
+
+    // Constrain vertical movement
+    if (cardRect.top <= containerRect.top && newY > 0) {
+        newTop = activeCard.offsetTop; // Prevent moving further up
+    }
+    if (cardRect.bottom >= containerRect.bottom && newY < 0) {
+        newTop = activeCard.offsetTop; // Prevent moving further down
+    }
+
+    // Apply the constrained position
+    activeCard.style.left = `${newLeft}px`;
+    activeCard.style.top = `${newTop}px`;
 }
+
 
 // Function to handle the mouse up event (stop dragging)
 function mouseUp() {
@@ -147,3 +210,49 @@ function mouseUp() {
     document.removeEventListener('mouseup', mouseUp); // Remove mouse up event listener
     activeCard = null; // Reset active card
 }
+
+// Create the tools div
+const toolsDiv = document.createElement('div');
+toolsDiv.id = 'toolsDiv'; // Assign an ID for easier styling and access
+
+// Style the tools div
+toolsDiv.style.position = 'absolute'; // Position it relative to the container
+toolsDiv.style.width = `${container.offsetWidth}px`; // Match the container's width
+toolsDiv.style.height = '60px'; // Set a fixed height
+toolsDiv.style.borderRadius = '10px'; // Add rounded corners
+toolsDiv.style.backgroundColor = '#f0f0f0'; // Light gray background
+toolsDiv.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'; // Add a subtle shadow
+toolsDiv.style.display = 'flex'; // Use flexbox for layout
+toolsDiv.style.alignItems = 'center'; // Center items vertically
+toolsDiv.style.justifyContent = 'center'; // Center items horizontally
+
+function positionToolsDiv() {
+    const containerRect = container.getBoundingClientRect();
+    const screenPadding = 20; // Padding between the div and the bottom of the screen
+    const bottomSpace = window.innerHeight - containerRect.bottom;
+
+    // Position the toolsDiv below the container
+    if (bottomSpace > 100) {
+        toolsDiv.style.top = `${containerRect.bottom + 20}px`; // Position below the container with spacing
+    } else {
+        toolsDiv.style.top = `${window.innerHeight - toolsDiv.offsetHeight - screenPadding}px`; // Align closer to the bottom with padding
+    }
+
+    // Align horizontally using offsetLeft
+    toolsDiv.style.left = `${container.offsetLeft}px`;
+}
+
+
+// Position the tools div initially and on window resize
+positionToolsDiv();
+window.addEventListener('resize', positionToolsDiv);
+
+// Append the tools div to the body
+document.body.appendChild(toolsDiv);
+
+// Add a placeholder for tools
+const placeholder = document.createElement('span');
+placeholder.textContent = '(Tools)'; // Placeholder text
+placeholder.style.color = '#888'; // Light gray text color
+placeholder.style.fontSize = '14px'; // Font size
+toolsDiv.appendChild(placeholder);
