@@ -1,3 +1,6 @@
+//CONSTANTS
+
+
 let cardIndex = 0; // Tracks the current card being added
 const maxPlayers = 11; // Maximum number of players
 const cardHeight = 60; // Height of each card including some margin
@@ -6,17 +9,6 @@ const playerGap = 20; // Vertical gap between players
 const columnGap = 80; // Horizontal gap between columns
 const container = document.getElementById('container'); // Get the container element where the cards will be placed
 const card = document.getElementById('card'); // Get the base card template for cloning later
-
-
-
-
-
-
-
-
-
-
-
 
 // Container's dimensions
 const containerWidth = container.offsetWidth; // Width of the container
@@ -29,6 +21,9 @@ const columns = [
     { players: 4 },   // Midfielders
     { players: 2 },   // Strikers
 ];
+
+
+//COLUMN POSITIONING
 
 // Calculate horizontal positions for each column based on the number of columns and container width
 columns.forEach((column, i) => {
@@ -124,7 +119,7 @@ placeButton.style.backgroundColor = '#007BFF'; // Set background color
 placeButton.style.color = 'white'; // Set text color
 placeButton.style.border = 'none'; // Remove border
 placeButton.style.borderRadius = '5px'; // Add rounded corners
-placeButton.style.cursor = 'cursor'; // Change cursor to pointer
+placeButton.style.cursor = 'pointer'; // Change cursor to pointer
 placeButton.style.fontSize = '14px'; // Set font size
 
 function positionButton() {
@@ -137,6 +132,7 @@ function positionButton() {
 }
 
 
+
 // Position the button initially and on window resize
 positionButton();
 window.addEventListener('resize', positionButton);
@@ -146,6 +142,12 @@ placeButton.addEventListener('click', placeCard);
 
 // Append the button to the body
 document.body.appendChild(placeButton);
+
+
+
+
+// DRAGGING FUNCTION
+
 
 
 let activeCard = null; // To track the card being dragged
@@ -211,6 +213,11 @@ function mouseUp() {
     activeCard = null; // Reset active card
 }
 
+
+
+// TOOLS
+
+
 // Create the tools div
 const toolsDiv = document.createElement('div');
 toolsDiv.id = 'toolsDiv'; // Assign an ID for easier styling and access
@@ -243,6 +250,7 @@ function positionToolsDiv() {
 }
 
 
+
 // Position the tools div initially and on window resize
 positionToolsDiv();
 window.addEventListener('resize', positionToolsDiv);
@@ -252,7 +260,193 @@ document.body.appendChild(toolsDiv);
 
 // Add a placeholder for tools
 const placeholder = document.createElement('span');
-placeholder.textContent = '(Tools)'; // Placeholder text
+placeholder.textContent = ''; // Placeholder text
 placeholder.style.color = '#888'; // Light gray text color
 placeholder.style.fontSize = '14px'; // Font size
 toolsDiv.appendChild(placeholder);
+
+
+// LINE
+
+// Add "Draw Line" button to toolsDiv
+const drawLineButton = document.createElement('button');
+drawLineButton.textContent = 'Draw Line';
+drawLineButton.style.padding = '10px 20px';
+drawLineButton.style.backgroundColor = '#28A745';
+drawLineButton.style.color = 'white';
+drawLineButton.style.border = 'none';
+drawLineButton.style.borderRadius = '5px';
+drawLineButton.style.cursor = 'pointer';
+drawLineButton.style.marginRight = '10px';
+toolsDiv.appendChild(drawLineButton);
+
+// Line drawing state variables
+let isDrawing = false;
+let activeLine = null;
+
+// Toggle line drawing mode
+drawLineButton.addEventListener('click', () => {
+    isDrawing = !isDrawing;
+    drawLineButton.style.backgroundColor = isDrawing ? '#DC3545' : '#28A745';
+    drawLineButton.textContent = isDrawing ? 'Cancel Line' : 'Draw Line';
+});
+
+// Start drawing a line
+container.addEventListener('mousedown', (e) => {
+    if (!isDrawing) return;
+
+    // Create the line
+    activeLine = document.createElement('div');
+    activeLine.style.position = 'absolute';
+    activeLine.style.backgroundColor = 'black';
+    activeLine.style.height = '2px';
+    activeLine.style.left = `${e.offsetX}px`;
+    activeLine.style.top = `${e.offsetY}px`;
+    activeLine.style.width = '0px';
+    activeLine.style.transformOrigin = '0 50%';
+    activeLine.classList.add('draggable-line');
+    
+    // Create rotation handle
+    const rotationHandle = document.createElement('div');
+    rotationHandle.style.position = 'absolute';
+    rotationHandle.style.width = '10px';
+    rotationHandle.style.height = '10px';
+    rotationHandle.style.backgroundColor = 'blue';
+    rotationHandle.style.borderRadius = '50%';
+    rotationHandle.style.cursor = 'grab';
+    rotationHandle.style.transform = 'translate(-50%, -50%)';
+    rotationHandle.style.display = 'none'; // Hidden during drawing
+    rotationHandle.classList.add('rotation-handle');
+    activeLine.appendChild(rotationHandle);
+
+    // Create delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'X';
+    deleteButton.style.position = 'absolute';
+    deleteButton.style.width = '20px';
+    deleteButton.style.height = '20px';
+    deleteButton.style.backgroundColor = 'red';
+    deleteButton.style.color = 'white';
+    deleteButton.style.border = 'none';
+    deleteButton.style.borderRadius = '50%';
+    deleteButton.style.cursor = 'pointer';
+    deleteButton.style.transform = 'translate(-50%, -50%)';
+    deleteButton.style.display = 'none'; // Initially hidden
+    deleteButton.classList.add('delete-button');
+    activeLine.appendChild(deleteButton);
+
+    container.appendChild(activeLine);
+
+    // Store initial position
+    activeLine.startX = e.offsetX;
+    activeLine.startY = e.offsetY;
+
+    // Add listeners for resizing
+    document.addEventListener('mousemove', resizeLine);
+    document.addEventListener('mouseup', stopDrawing);
+
+    // Setup rotation and delete functionality
+    setupRotation(rotationHandle, activeLine);
+    setupDelete(deleteButton, activeLine);
+});
+
+// Resize the line
+function resizeLine(e) {
+    if (!activeLine) return;
+
+    const deltaX = e.offsetX - activeLine.startX;
+    const deltaY = e.offsetY - activeLine.startY;
+    const length = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+    activeLine.style.width = `${length}px`;
+    activeLine.style.transform = `rotate(${Math.atan2(deltaY, deltaX)}rad)`;
+}
+
+// Stop drawing and enable rotation after deselection
+function stopDrawing() {
+    if (!activeLine) return;
+
+    // Make draggable
+    activeLine.addEventListener('mousedown', dragLine);
+
+    // Show rotation handle after deselecting
+    const rotationHandle = activeLine.querySelector('.rotation-handle');
+    if (rotationHandle) rotationHandle.style.display = 'block';
+
+    document.removeEventListener('mousemove', resizeLine);
+    document.removeEventListener('mouseup', stopDrawing);
+
+    activeLine = null;
+}
+
+// Drag line
+function dragLine(e) {
+    const line = e.target.closest('.draggable-line');
+    if (!line) return;
+
+    let startX = e.clientX;
+    let startY = e.clientY;
+
+    // Show the delete button when the line is clicked
+    const deleteButton = line.querySelector('.delete-button');
+    if (deleteButton) deleteButton.style.display = 'block';
+
+    function moveLine(e) {
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        line.style.left = `${line.offsetLeft + deltaX}px`;
+        line.style.top = `${line.offsetTop + deltaY}px`;
+
+        startX = e.clientX;
+        startY = e.clientY;
+    }
+
+    function releaseLine() {
+        document.removeEventListener('mousemove', moveLine);
+        document.removeEventListener('mouseup', releaseLine);
+    }
+
+    document.addEventListener('mousemove', moveLine);
+    document.addEventListener('mouseup', releaseLine);
+}
+
+// Setup rotation functionality (only after deselection)
+function setupRotation(handle, line) {
+    handle.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+
+        const rect = line.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        function rotateLine(e) {
+            const deltaX = e.clientX - centerX;
+            const deltaY = e.clientY - centerY;
+            const angle = Math.atan2(deltaY, deltaX);
+
+            line.style.transform = `rotate(${angle}rad)`;
+        }
+
+        function stopRotation() {
+            document.removeEventListener('mousemove', rotateLine);
+            document.removeEventListener('mouseup', stopRotation);
+        }
+
+        document.addEventListener('mousemove', rotateLine);
+        document.addEventListener('mouseup', stopRotation);
+    });
+}
+
+// Setup delete functionality
+function setupDelete(deleteButton, line) {
+    deleteButton.addEventListener('click', () => {
+        line.remove(); // Remove the line from the DOM
+    });
+
+    // Hide delete button when clicking outside the line
+    document.addEventListener('click', (e) => {
+        if (!line.contains(e.target)) {
+            deleteButton.style.display = 'none';
+        }
+    })}
