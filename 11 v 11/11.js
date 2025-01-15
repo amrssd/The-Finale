@@ -450,3 +450,66 @@ function setupDelete(deleteButton, line) {
             deleteButton.style.display = 'none';
         }
     })}
+
+//FORMATION
+
+    // Add dropdown for formation selection
+const formationDropdown = document.createElement('select');
+formationDropdown.style.padding = '10px';
+formationDropdown.style.borderRadius = '5px';
+formationDropdown.style.marginRight = '10px';
+formationDropdown.style.fontSize = '14px';
+toolsDiv.appendChild(formationDropdown);
+
+// Add formation options
+const formations = {
+    '4-4-2': [1, 4, 4, 2],
+    '4-3-3': [1, 4, 3, 3], // Example new formation
+    '3-5-2': [1, 3, 5, 2], // Add more formations as needed
+
+
+};
+
+Object.keys(formations).forEach(formation => {
+    const option = document.createElement('option');
+    option.value = formation;
+    option.textContent = formation;
+    formationDropdown.appendChild(option);
+});
+
+// Rearrange players based on the selected formation
+formationDropdown.addEventListener('change', () => {
+    const selectedFormation = formationDropdown.value;
+    const newColumns = formations[selectedFormation];
+
+    // Update column players count
+    newColumns.forEach((playerCount, index) => {
+        if (columns[index]) {
+            columns[index].players = playerCount;
+        }
+    });
+
+    // Reposition players
+    repositionPlayers(newColumns);
+});
+
+function repositionPlayers(newFormation) {
+    const allCards = container.querySelectorAll('.card');
+    let cardCounter = 0;
+
+    newFormation.forEach((playerCount, columnIndex) => {
+        const columnPlayers = playerCount;
+        const totalHeight = columnPlayers * cardHeight + (columnPlayers - 1) * playerGap;
+        const startTop = (containerHeight - totalHeight) / 2;
+
+        for (let i = 0; i < columnPlayers; i++) {
+            if (cardCounter >= allCards.length) return;
+
+            const card = allCards[cardCounter];
+            card.style.left = `${columns[columnIndex].left}px`;
+            card.style.top = `${startTop + i * (cardHeight + playerGap)}px`;
+
+            cardCounter++;
+        }
+    });
+}
