@@ -266,6 +266,65 @@ placeholder.style.fontSize = '14px'; // Font size
 toolsDiv.appendChild(placeholder);
 
 
+//BALL
+
+// Add "Add Ball" button to toolsDiv
+const addBallButton = document.createElement('button');
+addBallButton.textContent = 'Add Ball';
+addBallButton.style.padding = '10px 20px';
+addBallButton.style.backgroundColor = '#FFC107';
+addBallButton.style.color = 'black';
+addBallButton.style.border = 'none';
+addBallButton.style.borderRadius = '5px';
+addBallButton.style.cursor = 'pointer';
+addBallButton.style.marginRight = '10px';
+toolsDiv.appendChild(addBallButton);
+
+// Add event listener for adding a ball
+addBallButton.addEventListener('click', () => {
+    // Create a new ball element
+    const ball = document.createElement('div');
+    ball.style.width = '30px'; // Set ball diameter
+    ball.style.height = '30px';
+    ball.style.borderRadius = '50%';
+    ball.style.backgroundColor = 'white';
+    ball.style.position = 'absolute';
+    ball.style.left = `${container.offsetWidth / 2 - 15}px`; // Center the ball horizontally
+    ball.style.top = `${container.offsetHeight / 2 - 15}px`; // Center the ball vertically
+    ball.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)'; // Add shadow for a realistic look
+    ball.classList.add('ball'); // Add a class for future styling or interactions
+
+    // Add dragging functionality to the ball
+    ball.addEventListener('mousedown', (e) => {
+        let startX = e.clientX;
+        let startY = e.clientY;
+
+        const moveBall = (e) => {
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+
+            ball.style.left = `${ball.offsetLeft + deltaX}px`;
+            ball.style.top = `${ball.offsetTop + deltaY}px`;
+
+            startX = e.clientX;
+            startY = e.clientY;
+        };
+
+        const stopBall = () => {
+            document.removeEventListener('mousemove', moveBall);
+            document.removeEventListener('mouseup', stopBall);
+        };
+
+        document.addEventListener('mousemove', moveBall);
+        document.addEventListener('mouseup', stopBall);
+    });
+
+    // Append the ball to the container
+    container.appendChild(ball);
+});
+
+
+
 // LINE
 
 // Add "Draw Line" button to toolsDiv
@@ -513,3 +572,5 @@ function repositionPlayers(newFormation) {
         }
     });
 }
+
+
